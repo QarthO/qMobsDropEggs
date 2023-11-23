@@ -1,0 +1,43 @@
+################################################################
+# +----------------------------------------------------------+ #
+# |                   qMobsDropEggs Config                   | #
+# |   Source:   https://github.com/QarthO/qMobsDropEggs      | #
+# |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
+# |   Donate:   https://paypal.me/qartho                     | #
+# +----------------------------------------------------------+ #
+################################################################
+
+version: ${project.version}
+check-updates: true
+
+# Will only drop an egg if killed by a player
+requires-player-killer: true
+# Will check if the player has the permission: 'qMDE.player'
+killer-requires-permission: true
+
+# Name of the world where the plugin will be disabled
+disabled-worlds:
+  - hub
+  - creative
+
+# Should the drop chance be increased by looting
+# Each level of looting adds 1% to the drop-chance
+factor-looting: true
+
+# The odds of a spawn egg from dropping when a player kills a mob
+# 1 would be 1% chance, (supports decimals)
+drop-chance:
+  default: 1
+  mobs:
+    SHULKER: .1
+#    PHANTOM: 10
+#    VILLAGER: .1
+
+# Prevent certain mobs from dropping spawn eggs
+# Spawn Egg list: https://minecraft.wiki/w/Spawn_Egg
+# EntityType format: https://jd.papermc.io/paper/1.20/org/bukkit/entity/EntityType.html
+blacklisted-mobs:
+  - ENDER_DRAGON
+  - WARDEN
+  - WITHER
+  - WANDERING_TRADER

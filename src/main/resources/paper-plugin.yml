@@ -1,0 +1,4 @@
+name: qMobsDropEggs
+version: '${project.version}'
+main: gg.quartzdev.qmobsdropeggs.qMobsDropEggs
+api-version: '1.20'
