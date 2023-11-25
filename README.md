@@ -32,7 +32,7 @@
 - Prevent 
 - Disable in certain worlds
 
-<i>*Note: Only supports mobs that have valid spawn eggs. Full list can be found <a href="https://minecraft.wiki/w/Spawn_Egg" target="_blank">here</a><i>
+<i>*Note: Only supports mobs that have valid spawn eggs. Full list can be found <a href="https://minecraft.wiki/w/Spawn_Egg" target="_blank">here</a></i>
 
 ---
 
