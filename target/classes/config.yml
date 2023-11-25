@@ -7,7 +7,7 @@
 # +----------------------------------------------------------+ #
 ################################################################
 
-version: ${project.version}
+version: 1.0.0
 check-updates: true
 
 # Will only drop an egg if killed by a player
@@ -17,7 +17,6 @@ killer-requires-permission: true
 
 # Mobs won't drop eggs if their spawn reason matches anything in this list
 # If you want this empty set this to >> blacklist-spawn-reasons: []
-# SpawnReason List: https://jd.papermc.io/paper/1.16/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
 blacklisted-spawn-reasons:
   - SPAWNER
 

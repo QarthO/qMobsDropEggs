@@ -1,50 +1,61 @@
 package gg.quartzdev.qmobsdropeggs.listeners;
 
+import gg.quartzdev.qmobsdropeggs.qConfig;
+import gg.quartzdev.qmobsdropeggs.qMobsDropEggs;
+import gg.quartzdev.qmobsdropeggs.util.qLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SpawnEggMeta;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class EntityDeathListener implements Listener {
-    boolean REQUIRES_PERMISSION = false;
-    double DROP_PERCENTAGE = 1;
-
-    List<EntityType> blacklistedSpawnEggs;
+    qMobsDropEggs plugin;
+    qConfig config;
+    qLogger logger;
 
     public EntityDeathListener(){
-        blacklistedSpawnEggs = new ArrayList<>();
-        blacklistedSpawnEggs.add(EntityType.ELDER_GUARDIAN);
-        blacklistedSpawnEggs.add(EntityType.ENDER_DRAGON);
-        blacklistedSpawnEggs.add(EntityType.WARDEN);
-        blacklistedSpawnEggs.add(EntityType.WITHER);
-        blacklistedSpawnEggs.add(EntityType.WANDERING_TRADER);
+        this.plugin = qMobsDropEggs.instance;
+        this.logger = qMobsDropEggs.logger;
+        this.config = qMobsDropEggs.config;
     }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event){
         Entity entity = event.getEntity();
+        World world = entity.getWorld();
+
+//        World check
+        if(config.isDisabledWorld(world)) return;
+
+//        Spawn Reason check
+        SpawnReason spawnReason = entity.getEntitySpawnReason();
+        if(config.getBlacklistedSpawnReasons().contains(spawnReason)) return;
+
+//        Gets killer
         Player player = event.getEntity().getKiller();
-        if(player == null) return;
 
-//        checks perms if needed
-        if(REQUIRES_PERMISSION && !player.hasPermission("qmobloot.player")) return;
+//        Player & Permission check
+        if(config.requiresPlayerKiller()){
+            if(player == null) return;
+            if(config.killerRequiresPermission())
+                if(!player.hasPermission("qMDE.killer")) return;
+        }
 
-//        checks if mob needs a spawn egg
-        EntityType entityType = entity.getType();
-        if(blacklistedSpawnEggs.contains(entityType)) return;
+//        Mob check
+        EntityType mobType = entity.getType();
+        if(config.isBlacklistedMob(mobType)) return;
         ItemStack item = createSpawnEgg(entity.getType());
         if(item == null) return;
 
@@ -52,16 +63,19 @@ public class EntityDeathListener implements Listener {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         float rng = random.nextFloat(0.01F, 100.0F);
 
-//        Factor in looting odds (1% per looting level)
-        if(player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
-            rng = rng+ player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+//        Looting check (+1% drop chance per looting level)
+        if(player != null)
+            if(config.factoringLooting())
+                if(player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
+                    rng = rng+ player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 
-//        Add to mob drops if rng passes
-        if(rng <= DROP_PERCENTAGE)
+//        Checks RNG
+        if(rng <= config.getDropChance(mobType))
+//            Adds spawn egg
             event.getDrops().add(item);
     }
 
-    private ItemStack createSpawnEgg(EntityType type){
+    private @Nullable ItemStack createSpawnEgg(EntityType type){
         Material spawnEggMaterial = Bukkit.getItemFactory().getSpawnEgg(type);
         if(spawnEggMaterial == null) return null;
         return new ItemStack(spawnEggMaterial);
