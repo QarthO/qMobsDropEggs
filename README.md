@@ -44,7 +44,7 @@
 # |                   qMobsDropEggs Config                   | #
 # |   Source:   https://github.com/QarthO/qMobsDropEggs/     | #
 # |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
-# |   Donate:   https://www.quartzdev.gg/donate/             | #
+# |   Donate:   https://quartzdev.gg/donate/                 | #
 # +----------------------------------------------------------+ #
 ################################################################
 
