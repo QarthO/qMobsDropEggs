@@ -104,7 +104,6 @@ public class qConfig {
     public void loadBlacklistedSpawnReasons(){
         this.BLACKLISTED_SPAWN_REASONS.clear();
         List<String> blacklistedSpawnReasonNames = this.file.getStringList("blacklisted-spawn-reasons");
-        qLOGGER.log(blacklistedSpawnReasonNames.toString());
         if(blacklistedSpawnReasonNames.isEmpty()) return;
         for(String spawnReasonName : blacklistedSpawnReasonNames){
             try{
@@ -125,7 +124,6 @@ public class qConfig {
     }
 
     private void loadDisabledWorlds(){
-        qLOGGER.log("loadDisabledWorlds");
         this.DISABLED_WORLDS.clear();
         List<String> disabledWorldNames = this.file.getStringList("disabled-worlds");
         if(disabledWorldNames.isEmpty()) return;
@@ -134,10 +132,7 @@ public class qConfig {
             if(world == null)
                 qLOGGER.error(Language.ERROR_WORLD_NOT_FOUND.parse("world", worldName));
             else {
-                qLOGGER.log("<green> Adding <yellow>'" + world.getName() + "</yellow>' to disabled worlds");
-                qLOGGER.log("<green> Before: " + DISABLED_WORLDS.toString());
                 DISABLED_WORLDS.add(world);
-                qLOGGER.log("<green> After: " + DISABLED_WORLDS.toString());
             }
         }
     }
