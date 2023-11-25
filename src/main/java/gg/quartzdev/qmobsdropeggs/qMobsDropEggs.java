@@ -4,6 +4,7 @@ import gg.quartzdev.qmobsdropeggs.commands.CommandManager;
 import gg.quartzdev.qmobsdropeggs.listeners.EntityDeathListener;
 import gg.quartzdev.qmobsdropeggs.util.qLogger;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
 
 public final class qMobsDropEggs extends JavaPlugin {
 
@@ -25,6 +26,10 @@ public final class qMobsDropEggs extends JavaPlugin {
         instance = this;
         logger = new qLogger();
         config = new qConfig();
+
+        int pluginId = 20381; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+
         new CommandManager(this.getPluginMeta().getName().toLowerCase());
 
         // Plugin startup logic
