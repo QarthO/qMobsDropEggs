@@ -59,7 +59,6 @@ public class qConfig {
     }
 
     public void loadAll(){
-        qLOGGER.log("Reloading config");
         this.loadCheckUpdates();
         this.loadRequiresPlayerKiller();
         this.loadKillerRequiresPermission();
