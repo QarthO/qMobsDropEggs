@@ -27,8 +27,11 @@ public class qConfig {
     boolean REQUIRES_PLAYER_KILLER;
     boolean KILLER_REQUIRES_PERMISSION;
     Set<SpawnReason> BLACKLISTED_SPAWN_REASONS;
+    boolean INVERT_BLACKLISTED_SPAWN_REASONS;
     Set<World> DISABLED_WORLDS;
     boolean FACTOR_LOOTING;
+    boolean COMPLEX_LOOTING;
+    double COMPLEX_LOOTING_BREAKPOINT;
     double DEFAULT_DROP_CHANCE;
     HashMap<EntityType, Double> DROP_CHANCES;
     Set<EntityType> BLACKLISTED_MOBS;
@@ -39,9 +42,10 @@ public class qConfig {
         this.file = this.plugin.getConfig();
         this.plugin.saveDefaultConfig();
         this.DISABLED_WORLDS = new HashSet<>();
+        this.BLACKLISTED_SPAWN_REASONS = new HashSet<>();
         this.DROP_CHANCES = new HashMap<>();
         this.BLACKLISTED_MOBS = new HashSet<>();
-        this.reload();
+        this.loadAll();
     }
 
     private void save(){
@@ -49,12 +53,22 @@ public class qConfig {
     }
 
     public void reload(){
+        this.plugin.reloadConfig();
+        this.file = this.plugin.getConfig();
+        this.loadAll();
+    }
+
+    public void loadAll(){
+        qLOGGER.log("Reloading config");
         this.loadCheckUpdates();
         this.loadRequiresPlayerKiller();
         this.loadKillerRequiresPermission();
         this.loadBlacklistedSpawnReasons();
+        this.loadInvertBlacklistedSpawnReasons();
         this.loadDisabledWorlds();
         this.loadFactorLooting();
+        this.loadComplexLooting();
+        this.loadComplexLootingBreakpoint();
         this.loadMobDropChance();
         this.loadBlacklistedMobs();
     }
@@ -102,7 +116,16 @@ public class qConfig {
         }
     }
 
+    public boolean invertBlacklistedSpawnReasons(){
+        return this.INVERT_BLACKLISTED_SPAWN_REASONS;
+    }
+
+    public void loadInvertBlacklistedSpawnReasons(){
+        this.INVERT_BLACKLISTED_SPAWN_REASONS = this.file.getBoolean("invert-blacklisted-spawn-reasons");
+    }
+
     private void loadDisabledWorlds(){
+        qLOGGER.log("loadDisabledWorlds");
         this.DISABLED_WORLDS.clear();
         List<String> disabledWorldNames = this.file.getStringList("disabled-worlds");
         if(disabledWorldNames.isEmpty()) return;
@@ -110,13 +133,13 @@ public class qConfig {
             World world = Bukkit.getWorld(worldName);
             if(world == null)
                 qLOGGER.error(Language.ERROR_WORLD_NOT_FOUND.parse("world", worldName));
-            else
+            else {
+                qLOGGER.log("<green> Adding <yellow>'" + world.getName() + "</yellow>' to disabled worlds");
+                qLOGGER.log("<green> Before: " + DISABLED_WORLDS.toString());
                 DISABLED_WORLDS.add(world);
+                qLOGGER.log("<green> After: " + DISABLED_WORLDS.toString());
+            }
         }
-    }
-
-    public Set<World> getDisabledWorlds(){
-        return DISABLED_WORLDS;
     }
 
     public boolean isDisabledWorld(World world){
@@ -129,6 +152,22 @@ public class qConfig {
 
     public boolean factoringLooting(){
         return this.FACTOR_LOOTING;
+    }
+
+    private void loadComplexLooting(){
+        this.COMPLEX_LOOTING = this.file.getBoolean("complex-looting");
+    }
+
+    public boolean complexLooting(){
+        return this.COMPLEX_LOOTING;
+    }
+
+    private void loadComplexLootingBreakpoint(){
+        this.COMPLEX_LOOTING_BREAKPOINT = this.file.getDouble("complex-looting-breakpoint");
+    }
+
+    public double complexLootingBreakpoint(){
+        return this.COMPLEX_LOOTING_BREAKPOINT;
     }
 
     private void loadMobDropChance(){

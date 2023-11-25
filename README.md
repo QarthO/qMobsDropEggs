@@ -1,4 +1,4 @@
-<p align="center"><a  href="https://modrinth.com/plugin/qMobsDropEggs"><img alt="Modrinth Download Link" src="https://img.shields.io/badge/Download-00AF5C?logo=modrinth&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://www.quartzdev.gg/discord/" target="_blank"><img alt="Discord Invite" src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://github.com/QarthO/qMobsDropEggs" target="_blank"><img alt="GitHub Source Code" src="https://img.shields.io/badge/Source-181717?logo=github&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://paypal.me/qartho/" target="_blank"><img alt="Paypal Donation Link" src="https://img.shields.io/badge/Donate-00457C?logo=paypal&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://modrinth.com/plugin/qMobsDropEggs/versions"><img alt="Supported Versions: 1.20.2" src="https://img.shields.io/badge/1.20.2-blue?style=for-the-badge&label=Minecraft Versions" height="32"></a></p>
+<p align="center"><a  href="https://modrinth.com/plugin/qMobsDropEggs"><img alt="Modrinth Download Link" src="https://img.shields.io/badge/Download-00AF5C?logo=modrinth&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://www.quartzdev.gg/discord/" target="_blank"><img alt="Discord Invite" src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://github.com/QarthO/qMobsDropEggs" target="_blank"><img alt="GitHub Source Code" src="https://img.shields.io/badge/Source-181717?logo=github&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://www.quartzdev.gg/donate/" target="_blank"><img alt="Paypal Donation Link" src="https://img.shields.io/badge/Donate-00457C?logo=paypal&logoColor=white&style=for-the-badge" height="32"></a> <a href="https://modrinth.com/plugin/qMobsDropEggs/versions"><img alt="Supported Versions: 1.20.2" src="https://img.shields.io/badge/1.20.2-blue?style=for-the-badge&label=Minecraft Versions" height="32"></a></p>
 
 ---
 
@@ -15,9 +15,10 @@
 
 <h3>Configuarble Features</h3>
 
-- Prevent certain mobs from dropping their spawn egg*
 - Have different drop rates for each mob
+- Prevent certain mobs from dropping their spawn egg*
 - Increase the drop rates when using looting enchant
+- Prevent 
 - Disable in certain worlds
 
 **Note: Only supports mobs that have valid spawn eggs. Full list can be found [here](https://minecraft.wiki/w/Spawn_Egg)*
@@ -32,17 +33,26 @@
 # |                   qMobsDropEggs Config                   | #
 # |   Source:   https://github.com/QarthO/qMobsDropEggs      | #
 # |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
-# |   Donate:   https://paypal.me/qartho                     | #
+# |   Donate:   https://quartzdev.gg/donate                  | #
 # +----------------------------------------------------------+ #
 ################################################################
 
-version: 1.0
+version: 1.0.0
 check-updates: true
 
 # Will only drop an egg if killed by a player
 requires-player-killer: true
 # Will check if the player has the permission: 'qMDE.player'
 killer-requires-permission: true
+
+# Mobs won't drop eggs if their spawn reason matches anything in this list
+# If you want this empty set this to >> blacklist-spawn-reasons: []
+# SpawnReason List: https://jd.papermc.io/paper/1.16/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
+blacklisted-spawn-reasons:
+  - SPAWNER
+
+# If set to true, this will treat the above spawn-reason list as a whitelist
+invert-blacklisted-spawn-reasons: false
 
 # Name of the world where the plugin will be disabled
 disabled-worlds:
@@ -71,8 +81,6 @@ blacklisted-mobs:
   - WARDEN
   - WITHER
   - WANDERING_TRADER
-
-
 ```
 
 ---

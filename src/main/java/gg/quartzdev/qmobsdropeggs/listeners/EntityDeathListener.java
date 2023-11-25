@@ -3,6 +3,7 @@ package gg.quartzdev.qmobsdropeggs.listeners;
 import gg.quartzdev.qmobsdropeggs.qConfig;
 import gg.quartzdev.qmobsdropeggs.qMobsDropEggs;
 import gg.quartzdev.qmobsdropeggs.util.qLogger;
+import gg.quartzdev.qmobsdropeggs.util.qUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -36,15 +37,26 @@ public class EntityDeathListener implements Listener {
         Entity entity = event.getEntity();
         World world = entity.getWorld();
 
+        Player player = event.getEntity().getKiller();
+        if(player == null) return;
 //        World check
-        if(config.isDisabledWorld(world)) return;
+        if(config.isDisabledWorld(world)) {
+            return;
+        }
 
 //        Spawn Reason check
         SpawnReason spawnReason = entity.getEntitySpawnReason();
-        if(config.getBlacklistedSpawnReasons().contains(spawnReason)) return;
+
+        if(config.getBlacklistedSpawnReasons().contains(spawnReason)){
+            if(!config.invertBlacklistedSpawnReasons()){
+                return;
+            }
+        }
 
 //        Gets killer
-        Player player = event.getEntity().getKiller();
+//        Player player = event.getEntity().getKiller();
+
+//        if(player == null) return;
 
 //        Player & Permission check
         if(config.requiresPlayerKiller()){
@@ -56,23 +68,29 @@ public class EntityDeathListener implements Listener {
 //        Mob check
         EntityType mobType = entity.getType();
         if(config.isBlacklistedMob(mobType)) return;
-        ItemStack item = createSpawnEgg(entity.getType());
-        if(item == null) return;
+        ItemStack spawnEgg = createSpawnEgg(entity.getType());
+        if(spawnEgg == null) return;
 
 //        RNG
         ThreadLocalRandom random = ThreadLocalRandom.current();
         float rng = random.nextFloat(0.01F, 100.0F);
 
-//        Looting check (+1% drop chance per looting level)
-        if(player != null)
-            if(config.factoringLooting())
-                if(player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
-                    rng = rng+ player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+        double dropChance = config.getDropChance(mobType);
 
+//        Looting check
+        if(config.factoringLooting()) {
+            if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+                int lootingLevel = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                if (config.complexLooting() && dropChance < config.complexLootingBreakpoint())
+                    dropChance = dropChance * (1 + lootingLevel);
+                else
+                    dropChance = dropChance + lootingLevel;
+            }
+        }
 //        Checks RNG
-        if(rng <= config.getDropChance(mobType))
+        if(rng <= dropChance)
 //            Adds spawn egg
-            event.getDrops().add(item);
+            event.getDrops().add(spawnEgg);
     }
 
     private @Nullable ItemStack createSpawnEgg(EntityType type){

@@ -1,9 +1,9 @@
 ################################################################
 # +----------------------------------------------------------+ #
 # |                   qMobsDropEggs Config                   | #
-# |   Source:   https://github.com/QarthO/qMobsDropEggs      | #
+# |   Source:   https://github.com/QarthO/qMobsDropEggs/     | #
 # |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
-# |   Donate:   https://paypal.me/qartho                     | #
+# |   Donate:   https://quartzdev.gg/donate/                 | #
 # +----------------------------------------------------------+ #
 ################################################################
 
@@ -21,6 +21,9 @@ killer-requires-permission: true
 blacklisted-spawn-reasons:
   - SPAWNER
 
+# If set to true, this will treat the above spawn-reason list as a whitelist
+invert-blacklisted-spawn-reasons: false
+
 # Name of the world where the plugin will be disabled
 disabled-worlds:
   - hub
@@ -29,6 +32,15 @@ disabled-worlds:
 # Should the drop chance be increased by looting
 # Each level of looting adds 1% to the drop-chance
 factor-looting: true
+# Changes the drop chance calculation when factoring in looting
+# But only if it is below the breakpoint
+# Now final drop chance = drop chance * (1 + looting level)
+# Example: drop chance of .05% with looting 3
+#         0.05% * (1 + 3) = .2%
+# complex-looting only makes sense for smaller numbers you want to keep small
+# factor-looting must be set to true
+complex-looting: true
+complex-looting-breakpoint: 1
 
 # The odds of a spawn egg from dropping when a player kills a mob
 # 1 would be 1% chance, (supports decimals)
