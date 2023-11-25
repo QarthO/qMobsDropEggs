@@ -3,7 +3,7 @@
 # |                   qMobsDropEggs Config                   | #
 # |   Source:   https://github.com/QarthO/qMobsDropEggs/     | #
 # |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
-# |   Donate:   https://quartzdev.gg/donate/                 | #
+# |   Donate:   https://www.quartzdev.gg/donate/             | #
 # +----------------------------------------------------------+ #
 ################################################################
 
@@ -47,8 +47,8 @@ complex-looting-breakpoint: 1
 drop-chance:
   default: 1
   mobs:
-    SHULKER: .25
-    IRON_GOLEM: .05
+    SHULKER: .01
+    IRON_GOLEM: .1
 #    PHANTOM: 10
 #    VILLAGER: .1
 

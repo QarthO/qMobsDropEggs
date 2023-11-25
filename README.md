@@ -42,9 +42,9 @@
 ################################################################
 # +----------------------------------------------------------+ #
 # |                   qMobsDropEggs Config                   | #
-# |   Source:   https://github.com/QarthO/qMobsDropEggs      | #
+# |   Source:   https://github.com/QarthO/qMobsDropEggs/     | #
 # |   Download: https://modrinth.com/plugin/qMobsDropEggs/   | #
-# |   Donate:   https://quartzdev.gg/donate                  | #
+# |   Donate:   https://www.quartzdev.gg/donate/             | #
 # +----------------------------------------------------------+ #
 ################################################################
 
@@ -73,14 +73,23 @@ disabled-worlds:
 # Should the drop chance be increased by looting
 # Each level of looting adds 1% to the drop-chance
 factor-looting: true
+# Changes the drop chance calculation when factoring in looting
+# But only if it is below the breakpoint
+# Now final drop chance = drop chance * (1 + looting level)
+# Example: drop chance of .05% with looting 3
+#         0.05% * (1 + 3) = .2%
+# complex-looting only makes sense for smaller numbers you want to keep small
+# factor-looting must be set to true
+complex-looting: true
+complex-looting-breakpoint: 1
 
 # The odds of a spawn egg from dropping when a player kills a mob
 # 1 would be 1% chance, (supports decimals)
 drop-chance:
   default: 1
   mobs:
-    SHULKER: .25
-    IRON_GOLEM: .05
+    SHULKER: .01
+    IRON_GOLEM: .1
 #    PHANTOM: 10
 #    VILLAGER: .1
 
