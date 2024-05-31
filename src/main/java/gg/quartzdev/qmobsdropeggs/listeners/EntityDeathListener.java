@@ -79,8 +79,8 @@ public class EntityDeathListener implements Listener {
 
 //        Looting check
         if(config.factoringLooting()) {
-            if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-                int lootingLevel = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOTING)) {
+                int lootingLevel = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOTING);
                 if (config.complexLooting() && dropChance < config.complexLootingBreakpoint())
                     dropChance = dropChance * (1 + lootingLevel);
                 else
