@@ -37,32 +37,24 @@ public class EntityDeathListener implements Listener {
         Entity entity = event.getEntity();
         World world = entity.getWorld();
 
-        Player player = event.getEntity().getKiller();
-        if(player == null) return;
 //        World check
-        if(config.isDisabledWorld(world)) {
-            return;
+        if(config.isDisabledWorld(world)) return;
+
+        Player player = event.getEntity().getKiller();
+        if(config.requiresPlayerKiller() && player == null) return;
+
+//        If a player killed the mob, check if they have the permission
+        if(player != null && config.killerRequiresPermission()) {
+//            Case-sensitive - I was dumb and had it 'qMDE' so check both to maintain backwards compatibility
+            if(!player.hasPermission("qmde.killer") && !player.hasPermission("qMDE.killer")) return;
         }
 
 //        Spawn Reason check
         SpawnReason spawnReason = entity.getEntitySpawnReason();
-
         if(config.getBlacklistedSpawnReasons().contains(spawnReason)){
             if(!config.invertBlacklistedSpawnReasons()){
                 return;
             }
-        }
-
-//        Gets killer
-//        Player player = event.getEntity().getKiller();
-
-//        if(player == null) return;
-
-//        Player & Permission check
-        if(config.requiresPlayerKiller()){
-            if(player == null) return;
-            if(config.killerRequiresPermission())
-                if(!player.hasPermission("qMDE.killer")) return;
         }
 
 //        Mob check
@@ -78,7 +70,7 @@ public class EntityDeathListener implements Listener {
         double dropChance = config.getDropChance(mobType);
 
 //        Looting check
-        if(config.factoringLooting()) {
+        if(player != null && config.factoringLooting()) {
             if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOTING)) {
                 int lootingLevel = player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOTING);
                 if (config.complexLooting() && dropChance < config.complexLootingBreakpoint())

@@ -18,7 +18,7 @@
 ---
 
 <h3> Tested Versions </h3>
-<p>Minecraft: v1.20.2</p>
+<p>Minecraft: v1.21.3</p>
 <p>Servers: <a href="https://papermc.io" target="_blank">Paper</a>, <a href="https://pufferfish.host/downloads" target="_blank">Pufferfish</a>, <a href="https://purpurmc.org" target="_blank">Purpur</a> or any other <u>stable</u> paper fork. </p>
 <blockquote>Spigot or modded hybrids will most <i>*likely*</i> work, but will recieve no support. If you're still using spigot, it is <b>HIGHLY</b> recommend you upgrade to Paper</blockquote>
 
@@ -53,7 +53,7 @@ check-updates: true
 
 # Will only drop an egg if killed by a player
 requires-player-killer: true
-# Will check if the player has the permission: 'qMDE.player'
+# Will check if the player has the permission: 'qmde.player'
 killer-requires-permission: true
 
 # Mobs won't drop eggs if their spawn reason matches anything in this list
