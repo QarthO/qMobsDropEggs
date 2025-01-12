@@ -89,7 +89,7 @@ public class qConfig {
     }
 
     private void loadKillerRequiresPermission(){
-        this.KILLER_REQUIRES_PERMISSION = this.file.getBoolean("killer-requires-permissions");
+        this.KILLER_REQUIRES_PERMISSION = this.file.getBoolean("killer-requires-permission");
     }
 
     public boolean killerRequiresPermission(){
